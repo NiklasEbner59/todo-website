@@ -6,6 +6,7 @@ import datetime
 from pydantic import BaseModel
 import hashlib
 from typing import Optional
+from fastapi.middleware.cors import CORSMiddleware
 
 DATABASE_URL = "sqlite:///./backend/database.db"
 
@@ -14,6 +15,14 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Für Entwicklung: alle Domains erlauben
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # User model
 class User(Base):

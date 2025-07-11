@@ -81,3 +81,83 @@ ul#todos li {
   justify-content: space-between;
   align-items: center;
 }
+
+.delete-btn {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem; /* kleineres Emoji */
+    border: none;
+    background: red;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 0 0 0 8px;
+    vertical-align: middle;
+    padding: 0;
+    line-height: 1;
+}
+
+.todo-checkbox {
+    accent-color: #2ecc40;
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    max-width: 40px;
+    max-height: 40px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    vertical-align: middle;
+}
+
+#todos li {
+    min-height: 48px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    display: flex;
+    align-items: center;
+    /* Abstand zwischen Text und Checkbox/Mülleimer */
+    gap: 0.5rem;
+}
+
+#todos li span {
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    height: 32px;
+}
+
+.edit-btn, .save-btn {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    border: none;
+    background: #f0c419;
+    color: #333;
+    border-radius: 8px;
+    cursor: pointer;
+    vertical-align: middle;
+    padding: 0;
+    line-height: 1;
+    margin: 0;
+}
+
+.save-btn {
+    background: #2ecc40;
+    color: white;
+}
+
+#todos li > *:not(:first-child) {
+    margin-left: 12px;
+}

@@ -21,6 +21,7 @@
                 <input type="password" id="password" placeholder="Password" required>
                 <button type="submit">Login</button>
             </form>
+            <div id="login-error" style="color:red;"></div>
             <p>No account yet? <a href="#" id="register-link">Register</a></p>
         </section>
         <!-- Registration Section (hidden by default) -->
@@ -31,10 +32,11 @@
                 <input type="password" id="register-password" placeholder="Password" required>
                 <button type="submit">Register</button>
             </form>
+            <div id="register-error" style="color:red;"></div>
             <p>Already have an account? <a href="#" id="login-link">Login</a></p>
         </section>
         <!-- ToDo Section (shown after login) -->
-        <section id="todo-section" style="display:none;">
+        <section id="todo-section">
             <button id="logout-btn">Logout</button>
             <section id="add-todo">
                 <h2>Add New ToDo</h2>
