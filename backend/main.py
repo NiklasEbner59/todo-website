@@ -5,6 +5,7 @@ from sqlalchemy.orm import sessionmaker, relationship, Session
 import datetime
 from pydantic import BaseModel
 import hashlib
+from typing import Optional
 
 DATABASE_URL = "sqlite:///./backend/database.db"
 
@@ -84,3 +85,25 @@ def login_user(request: LoginRequest, db: Session = Depends(get_db)):
     if password_hash_value != hash_password(request.password):
         raise HTTPException(status_code=400, detail="Invalid username or password")
     return {"message": "Login successful"}
+
+# Pydantic Modell für Todo-Erstellung
+class TodoCreateRequest(BaseModel):
+    text: str
+    username: str
+
+@app.post("/todos")
+def add_todo(request: TodoCreateRequest, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.username == request.username).first()
+    if user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    todo = Todo(text=request.text, owner=user)
+    db.add(todo)
+    db.commit()
+    db.refresh(todo)
+    return {
+        "id": todo.id,
+        "text": todo.text,
+        "completed": todo.completed,
+        "created_at": todo.created_at.isoformat(),
+        "username": user.username
+    }
