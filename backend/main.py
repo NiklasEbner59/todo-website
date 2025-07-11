@@ -139,3 +139,22 @@ def delete_todo(todo_id: int, db: Session = Depends(get_db)):
     db.delete(todo)
     db.commit()
     return {"message": f"Todo {todo_id} deleted successfully"}
+
+@app.get("/todos")
+def get_todos(username: str, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.username == username).first()
+    if user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    todos = db.query(Todo).filter(Todo.owner == user).all()
+    # List comprehension to create a list of dictionaries
+    result = [
+        {
+            "id": todo.id,
+            "text": todo.text,
+            "completed": todo.completed,
+            "created_at": todo.created_at.isoformat(),
+            "username": user.username
+        }
+        for todo in todos
+    ]
+    return result
