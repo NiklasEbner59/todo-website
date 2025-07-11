@@ -49,6 +49,11 @@ class RegisterRequest(BaseModel):
     username: str
     password: str
 
+# Pydantic model for login
+class LoginRequest(BaseModel):
+    username: str
+    password: str
+
 # Simple password hashing (for demo; use passlib/bcrypt in production)
 def hash_password(password: str) -> str:
     return hashlib.sha256(password.encode()).hexdigest()
@@ -67,3 +72,15 @@ def register_user(request: RegisterRequest, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(user)
     return {"message": "User registered successfully"}
+
+@app.post("/login")
+def login_user(request: LoginRequest, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.username == request.username).first()
+    if user is None:
+        raise HTTPException(status_code=400, detail="Invalid username or password")
+    password_hash_value = getattr(user, "password_hash", None)
+    if password_hash_value is None or not isinstance(password_hash_value, str):
+        raise HTTPException(status_code=500, detail="User password_hash is not a string!")
+    if password_hash_value != hash_password(request.password):
+        raise HTTPException(status_code=400, detail="Invalid username or password")
+    return {"message": "Login successful"}
