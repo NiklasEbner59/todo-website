@@ -107,3 +107,26 @@ def add_todo(request: TodoCreateRequest, db: Session = Depends(get_db)):
         "created_at": todo.created_at.isoformat(),
         "username": user.username
     }
+
+class TodoUpdateRequest(BaseModel):
+    text: Optional[str] = None
+    completed: Optional[bool] = None
+
+@app.put("/todos/{todo_id}")
+def update_todo(todo_id: int, request: TodoUpdateRequest, db: Session = Depends(get_db)):
+    todo = db.query(Todo).filter(Todo.id == todo_id).first()
+    if todo is None:
+        raise HTTPException(status_code=404, detail="Todo not found")
+    if request.text is not None:
+        todo.text = request.text  # type: ignore
+    if request.completed is not None:
+        todo.completed = request.completed  # type: ignore
+    db.commit()
+    db.refresh(todo)
+    return {
+        "id": todo.id,
+        "text": todo.text,
+        "completed": todo.completed,
+        "created_at": todo.created_at.isoformat(),
+        "username": todo.owner.username
+    }
